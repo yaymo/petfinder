@@ -1,0 +1,36 @@
+
+*{
+  box-sizing: border-box;
+}
+
+#map{
+  height: 400px;
+  width: 100%;
+}
+
+body{
+  margin: 5px;
+}
+
+.zip-search{
+  position: relative;
+  height: 65px;
+  width: 40%;
+  border: 2px solid black;
+  border-radius: 5px;
+  font-size: 30px;
+  margin: 10px;
+  padding-left: 10px;
+}
+
+.search-button{
+  height: 65px;
+  width: 70px;
+  border: 2px solid black;
+  border-radius: 5px;
+  position: relative;
+  top: -7px;
+  padding-top: 3px;
+  background-color: white;
+}
+
