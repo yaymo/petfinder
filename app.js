@@ -1,10 +1,10 @@
-/*function initMap(){
+function initMap(){
   var map = new google.maps.Map(document.getElementById('map'), {
     zoom: 5,
     center: new google.maps.LatLng(37.09024, -95.712891),
     mapTypeId: 'terrain'
   });
-}*/
+}
 
 var petfinder_URL ='https://api.petfinder.com/pet.find?callback=?';
 
@@ -26,30 +26,57 @@ function zipCallback(e){
   var params = {
     location: $('#zip-search').val()
   }
-  getPetData(params, displayPetData);
+  getPetData(params, shelterData);
 }
 
 function zipSubmit(){
   $(".search-button").on('click', zipCallback);
 }
 
-function displayPetData(results){
- if(results.petfinder.pets){
-    results.petfinder.pets.pet.forEach(function(pet){
-      var petList = '';
-      /*if(pet.breeds.breed.length>0){*/
-        for(var i=0; i<results.petfinder.pets.pet.length; i++){
-          petList +='<li>' + results.petfinder.pets.pet[i].contact.address1.$t + '</li>';
+
+//checking index to see if in array, if not add it. Problem is it's adding every object, not the uniques
+/*function shelterData(results){
+  var shelterList = [];
+  var dataPath = results.petfinder.pets.pet;
+  if(dataPath.length>0){
+    for(var i=0; i<dataPath.length; i++){
+      if(shelterList.indexOf(dataPath[i[.contact == -1)){
+        shelterList.push(dataPath.contact[i]);
       }
-    /*}
-      else {
-        petList = '<li>' + pet.breeds.breed.$t + '</li>';
-    }*/
+    }
+  }
+}*/
+//this actually works as expected, however i'd prefer not to use it since its a huge mess of objectives
+/*function shelterData(results){
+  var shelterList = [];
+  var dataPath = results.petfinder.pets.pet;
+  if(dataPath.length>0){
+    dataPath.forEach(function(pet){
+      shelterList.push(pet.contact);
     });
   }
-  console.log(petList);
-};
+}*/
+
+//this is supposed to check if the contact object is in the array, if not add it. It's adding every object instead of uniques
+/*function shelterData(results){
+  var shelterList = [];
+  var dataPath = results.petfinder.pets.pet;
+  if(dataPath.length>0){
+    for(var i=0; i<dataPath.length; i++){
+      if(shelterList.includes(dataPath[i].contact){
+        continue;
+      }
+      else{
+        shelterList.push([dataPath[i].contact]);
+      }
+    }
+  }
+}
+
 
 $(function(){
   zipSubmit();
 });
+
+
+
