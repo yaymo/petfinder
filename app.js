@@ -1,81 +1,64 @@
 function initMap(){
   var map = new google.maps.Map(document.getElementById('map'), {
     zoom: 5,
-    center: new google.maps.LatLng(37.09024, -95.712891),
-    mapTypeId: 'terrain'
+    center: {lat: 41, lng: -85}
   });
 }
 
-var petfinder_URL ='https://api.petfinder.com/pet.find?callback=?';
+var petfinder_URL ='https://api.petfinder.com/shelter.find?callback=?';
+var markers=[];
 
-
-function getPetData(params, callback){
+function getShelterData(searchTerm, callback){
   var query = {
     format: 'json',
     key:'2dd3916a40160c2090155ad9f7aeacb6'
   }
-  var keys = Object.keys(params);
+  var keys = Object.keys(searchTerm);
   for(var i=0; i<keys.length; i++){
-    query[keys[i]] = params[keys[i]];
+    query[keys[i]] = searchTerm[keys[i]];
   }
   $.getJSON(petfinder_URL, query, callback);
 }
 
-function zipCallback(e){
-  e.preventDefault();
-  var params = {
+function zipcodeCallback(event){
+  event.preventDefault();
+  var searchTerm = {
     location: $('#zip-search').val()
   }
-  getPetData(params, shelterData);
-}
-
-function zipSubmit(){
-  $(".search-button").on('click', zipCallback);
+  getShelterData(searchTerm, shelterLocations);
 }
 
 
-//checking index to see if in array, if not add it. Problem is it's adding every object, not the uniques
-/*function shelterData(results){
+function shelterLocations(results){
   var shelterList = [];
-  var dataPath = results.petfinder.pets.pet;
-  if(dataPath.length>0){
+  var dataPath = results.petfinder.shelters.shelter;
     for(var i=0; i<dataPath.length; i++){
-      if(shelterList.indexOf(dataPath[i[.contact == -1)){
-        shelterList.push(dataPath.contact[i]);
-      }
+      var latitude = parseInt(dataPath[i].latitude.$t);
+      var longitude = parseInt(dataPath[i].longitude.$t);
     }
+    addMarkers(latitude, longitude);
   }
-}*/
-//this actually works as expected, however i'd prefer not to use it since its a huge mess of objectives
-/*function shelterData(results){
-  var shelterList = [];
-  var dataPath = results.petfinder.pets.pet;
-  if(dataPath.length>0){
-    dataPath.forEach(function(pet){
-      shelterList.push(pet.contact);
-    });
-  }
-}*/
 
-//this is supposed to check if the contact object is in the array, if not add it. It's adding every object instead of uniques
-/*function shelterData(results){
-  var shelterList = [];
-  var dataPath = results.petfinder.pets.pet;
-  if(dataPath.length>0){
-    for(var i=0; i<dataPath.length; i++){
-      if(shelterList.includes(dataPath[i].contact){
-        continue;
-      }
-      else{
-        shelterList.push([dataPath[i].contact]);
-      }
+function addMarkers(latitude, longitude){
+  var myLatLng = new google.maps.LatLng(latitude, longitude);
+  var marker = new google.maps.Marker({
+    position: myLatLng,
+    map: map,
+  });
+  markers.push(marker);
+  google.maps.event.addListener(marker, 'click', (function(marker){
+    return function(){
+      infowindow.open(map);
     }
-  }
+  })(marker));
 }
 
+function watchZipSubmit(){
+  $(".search-button").on('click', zipcodeCallback);
+}
 
 $(function(){
-  zipSubmit();
+  watchZipSubmit();
 });
 
 
