@@ -6,7 +6,6 @@ function initMap(){
 }
 
 var petfinder_URL ='https://api.petfinder.com/shelter.find?callback=?';
-var markers=[];
 
 function getShelterData(searchTerm, callback){
   var query = {
@@ -33,24 +32,19 @@ function shelterLocations(results){
   var shelterList = [];
   var dataPath = results.petfinder.shelters.shelter;
     for(var i=0; i<dataPath.length; i++){
-      var latitude = parseInt(dataPath[i].latitude.$t);
-      var longitude = parseInt(dataPath[i].longitude.$t);
+      if(dataPath[i].address1.$t == undefined){
+        continue;
+      }
+      if(dataPath[i].phone.$t == undefined){
+        continue;
+      }
+      else{
+      shelterList.push('<ul> <h3>' + dataPath[i].name.$t + '</h3>' +
+        '<li>' + dataPath[i].address1.$t + '</li>' +
+        '<li>' + dataPath[i].phone.$t + '</li>');
     }
-    addMarkers(latitude, longitude);
   }
-
-function addMarkers(latitude, longitude){
-  var myLatLng = new google.maps.LatLng(latitude, longitude);
-  var marker = new google.maps.Marker({
-    position: myLatLng,
-    map: map,
-  });
-  markers.push(marker);
-  google.maps.event.addListener(marker, 'click', (function(marker){
-    return function(){
-      infowindow.open(map);
-    }
-  })(marker));
+    $("#locations").html(shelterList);
 }
 
 function watchZipSubmit(){
