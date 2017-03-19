@@ -43,13 +43,22 @@ function clearMarkers(){
 function displayShelterData(results){
   var myLatLng = [];
   var locationNames = [];
+  var shelterPhone;
   var dataPath = results.petfinder.shelters.shelter;
     for(var i=0; i<dataPath.length; i++){
 
       myLatLng.push([dataPath[i].latitude.$t, dataPath[i].longitude.$t]);
 
+      if(dataPath[i].phone.$t == undefined){
+        shelterPhone = "Sorry! No number listed";
+      }
+      else{
+        shelterPhone = dataPath[i].phone.$t;
+      }
+
       locationNames.push('<h3>' + dataPath[i].name.$t + '</h3>' +
-        '<h4>' + dataPath[i].phone.$t + '</h4>' +
+        '<h4>' + dataPath[i].city.$t + ', ' + dataPath[i].state.$t + '</h4>' +
+        '<h4>' + shelterPhone + '</h4>' +
         '<h4>Email us: <a href=#>' + dataPath[i].email.$t + '</a> </h4>' );
 
     }
