@@ -4,18 +4,29 @@
     <meta charset="UTF-8">
     <title>Pet rescue</title>
   <link rel="stylesheet" href="main.css" type="text/css">
+  <link rel="stylesheet" href="grid.css" type="text/css">
   </head>
   <body>
 
-   <div id="map"></div>
-   <div class="container">
-    <form action="#">
-      <input type="text" id="zip-search" name="zip-search" placeholder="Enter your zip">
-      <button type="submit" id="submit-zip">Search</button>
-    </form>
-  </div>
+    <div id="map"></div>
 
-   <ul id="locations"></ul>
+    <div class="row">
+
+      <div class="container-form">
+
+        <form action="#">
+
+            <label id="zip-label" for="zip-search">Find Pet Shelters Near You</label>
+
+            <input type="text" id="zip-search" name="zip-search" placeholder="Enter your zip!">
+
+            <button type="submit" id="submit-zip">Search</button>
+
+        </form>
+
+      </div>
+
+    </div>
 
 
 

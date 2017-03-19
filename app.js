@@ -28,7 +28,7 @@ function renderMarkers(myLatLng, locations){
     })(marker, i));
   }
 
-  var centered = new google.maps.LatLng(myLatLng[2][0], myLatLng[2][1]);
+  var centered = new google.maps.LatLng(myLatLng[2][0], myLatLng[3][1]);
   map.panTo(centered);
 }
 
@@ -88,6 +88,7 @@ function zipcodeCallback(event){
   }
   clearMarkers();
   getShelterData(searchTerm, displayShelterData);
+  $("#zip-search").val('');
 }
 
 
