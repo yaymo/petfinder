@@ -1,7 +1,7 @@
 var map;
 var markers = [];
 var myLatLng = [];
-var locationNames = [];
+
 function initMap(){
     map = new google.maps.Map(document.getElementById('map'), {
     zoom: 12,
@@ -11,7 +11,7 @@ function initMap(){
   });
 }
 
-function renderMarkers(myLatLng){
+function renderMarkers(myLatLng, locations){
   for (i=0; i < myLatLng.length; i++){
     var marker = new google.maps.Marker({
       position: new google.maps.LatLng(myLatLng[i][0], myLatLng[i][1]),
@@ -19,16 +19,15 @@ function renderMarkers(myLatLng){
     });
     markers.push(marker);
 
-    var infowindow = new google.maps.InfoWindow({
-      content: locationNames
-    });
+    var infowindow = new google.maps.InfoWindow();
     google.maps.event.addListener(marker, 'click', (function(marker, i) {
       return function () {
-        infowindow.setContent(locationNames[i]);
+        infowindow.setContent(locations[i]);
         infowindow.open(map, marker);
       }
     })(marker, i));
   }
+
   var centered = new google.maps.LatLng(myLatLng[2][0], myLatLng[2][1]);
   map.panTo(centered);
 }
@@ -40,6 +39,24 @@ function clearMarkers(){
   };
 }
 
+
+function displayShelterData(results){
+  var myLatLng = [];
+  var locationNames = [];
+  var dataPath = results.petfinder.shelters.shelter;
+    for(var i=0; i<dataPath.length; i++){
+
+      myLatLng.push([dataPath[i].latitude.$t, dataPath[i].longitude.$t]);
+
+      locationNames.push('<h3>' + dataPath[i].name.$t + '</h3>' +
+        '<h4>' + dataPath[i].phone.$t + '</h4>' +
+        '<h4>Email us: <a href=#>' + dataPath[i].email.$t + '</a> </h4>' );
+
+    }
+
+ renderMarkers(myLatLng, locationNames);
+
+}
 
 var petfinder_URL ='https://api.petfinder.com/shelter.find?callback=?';
 
@@ -61,27 +78,7 @@ function zipcodeCallback(event){
     location: $('#zip-search').val()
   }
   clearMarkers();
-  getShelterData(searchTerm, getShelterLatLng);
-}
-
-
-
-function getShelterLatLng(results){
-  var myLatLng = [];
-  var locationNames = [];
-  var dataPath = results.petfinder.shelters.shelter;
-    for(var i=0; i<dataPath.length; i++){
-      if(dataPath[i].name.$t == undefined){
-        continue;
-      }
-      if(dataPath[i].phone.$t == undefined){
-        continue;
-      }
-      myLatLng.push([dataPath[i].latitude.$t, dataPath[i].longitude.$t]);
-
-      locationNames.push([dataPath[i].name.$t, dataPath[i].phone.$t]);
-    }
- renderMarkers(myLatLng);
+  getShelterData(searchTerm, displayShelterData);
 }
 
 
