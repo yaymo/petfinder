@@ -66,7 +66,7 @@ function getMarkerData(results){
         shelterEmail = '<a href="mailto:"' + dataPath[i].email.$t + '>' + dataPath[i].email.$t + '</a>';
       }
 
-      locationNames.push('<div class="location-obj col-4"> <h3 class="name">' + dataPath[i].name.$t + '</h3>' +
+      locationNames.push('<div class="location-obj"> <h3 class="name">' + dataPath[i].name.$t + '</h3>' +
         '<h4>' + dataPath[i].city.$t + ', ' + dataPath[i].state.$t + '</h4>' +
         '<h4>' + shelterPhone + '</h4>' +
         '<h4>Email us: ' + shelterEmail + '</h4> </div>' );
@@ -74,12 +74,12 @@ function getMarkerData(results){
     }
 
  renderMarkers(myLatLng, locationNames);
- renderShelterHTML(locationNames);
+ //renderShelterHTML(locationNames);
 }
 
-function renderShelterHTML(data){
+/*function renderShelterHTML(data){
   $('#locations').html(data);
-}
+}*/
 
 var petfinder_URL ='https://api.petfinder.com/shelter.find?callback=?';
 
