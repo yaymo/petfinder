@@ -39,11 +39,11 @@ function clearMarkers(){
   };
 }
 
-
-function displayShelterData(results){
+function getMarkerData(results){
   var myLatLng = [];
   var locationNames = [];
   var shelterPhone;
+  var shelterEmail;
   var dataPath = results.petfinder.shelters.shelter;
     for(var i=0; i<dataPath.length; i++){
 
@@ -52,19 +52,33 @@ function displayShelterData(results){
       if(dataPath[i].phone.$t == undefined){
         shelterPhone = "Sorry! No number listed";
       }
+      else if(dataPath[i].phone.$t == '000-000-0000'){
+        shelterPhone = 'Sorry! No number listed';
+      }
       else{
         shelterPhone = dataPath[i].phone.$t;
       }
 
-      locationNames.push('<h3>' + dataPath[i].name.$t + '</h3>' +
+      if(dataPath[i].email.$t == undefined){
+        shelterEmail = 'Sorry! No Email Listed'
+      }
+      else{
+        shelterEmail = '<a href="mailto:"' + dataPath[i].email.$t + '>' + dataPath[i].email.$t + '</a>';
+      }
+
+      locationNames.push('<div class="location-obj col-4"> <h3 class="name">' + dataPath[i].name.$t + '</h3>' +
         '<h4>' + dataPath[i].city.$t + ', ' + dataPath[i].state.$t + '</h4>' +
         '<h4>' + shelterPhone + '</h4>' +
-        '<h4>Email us: <a href=#>' + dataPath[i].email.$t + '</a> </h4>' );
+        '<h4>Email us: ' + shelterEmail + '</h4> </div>' );
 
     }
 
  renderMarkers(myLatLng, locationNames);
+ renderShelterHTML(locationNames);
+}
 
+function renderShelterHTML(data){
+  $('#locations').html(data);
 }
 
 var petfinder_URL ='https://api.petfinder.com/shelter.find?callback=?';
@@ -87,7 +101,7 @@ function zipcodeCallback(event){
     location: $('#zip-search').val()
   }
   clearMarkers();
-  getShelterData(searchTerm, displayShelterData);
+  getShelterData(searchTerm, getMarkerData);
   $("#zip-search").val('');
 }
 
