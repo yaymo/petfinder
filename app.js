@@ -5,7 +5,7 @@ var myLatLng = [];
 function initMap(){
     map = new google.maps.Map(document.getElementById('map'), {
     zoom: 12,
-    center: new google.maps.LatLng(33.7499, -84.3880),
+    center: new google.maps.LatLng(33.7999, -84.3880),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     gestureHandling: 'cooperative'
   });
