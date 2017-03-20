@@ -2,6 +2,8 @@ var map;
 var markers = [];
 var myLatLng = [];
 
+
+//initialize map on page
 function initMap(){
     map = new google.maps.Map(document.getElementById('map'), {
     zoom: 12,
@@ -11,6 +13,7 @@ function initMap(){
   });
 }
 
+//creates markers to place on map and infowindow with relevant data for the markers
 function renderMarkers(myLatLng, locations){
   for (i=0; i < myLatLng.length; i++){
     var marker = new google.maps.Marker({
@@ -32,13 +35,15 @@ function renderMarkers(myLatLng, locations){
   map.panTo(centered);
 }
 
-
+//clears previous markers when user enters additional search
 function clearMarkers(){
   for (var i =0; i<markers.length; i++){
     markers[i].setMap(null)
   };
 }
 
+
+//creates variables to pass as data for markers and info window, then calls renderMarkers
 function getMarkerData(results){
   var myLatLng = [];
   var locationNames = [];
@@ -74,12 +79,9 @@ function getMarkerData(results){
     }
 
  renderMarkers(myLatLng, locationNames);
- //renderShelterHTML(locationNames);
 }
 
-/*function renderShelterHTML(data){
-  $('#locations').html(data);
-}*/
+
 
 var petfinder_URL ='https://api.petfinder.com/shelter.find?callback=?';
 
@@ -94,7 +96,7 @@ function getShelterData(searchTerm, callback){
   }
   $.getJSON(petfinder_URL, query, callback);
 }
-
+//callback for api function; calls clearMarker to empty old markers and places new ones; also clears input field
 function zipcodeCallback(event){
   event.preventDefault();
   var searchTerm = {
@@ -105,7 +107,7 @@ function zipcodeCallback(event){
   $("#zip-search").val('');
 }
 
-
+//event listener for zip code submission
 function watchZipSubmit(){
   $("#submit-zip").on('click', zipcodeCallback);
 }
